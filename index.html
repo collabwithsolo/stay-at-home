@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2b2420" />
+    <!-- Family game: keep it out of search engines -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- iPad / iPhone: "Add to Home Screen" opens the game full screen like an app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Stay at Home" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <title>Stay at Home!</title>
+    <link rel="icon" type="image/png" href="./icon-192.png" />
+    <script type="module" crossorigin src="./assets/index--I4w7uHq.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CNfR7BxU.css">
+  </head>
+  <body>
+    <div id="app">
+      <div id="stage" aria-hidden="true"></div>
+
+      <!-- Polite live region for phase/result announcements (never the per-second clock) -->
+      <div id="live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+      <!-- ───────── Title ───────── -->
+      <section id="title" class="screen" aria-labelledby="title-heading">
+        <div class="title-card">
+          <p class="eyebrow">A cozy hide-and-seek in the Ellington III</p>
+          <h1 id="title-heading">Stay at Home!</h1>
+          <p class="tagline">You’re Kai. Hide from Mom and Dad for three minutes. If they tag you, it’s chore time.</p>
+          <p class="family-note">Seeing you isn’t enough — they have to actually touch you. You’re fast; they’re not. Baby Girl might crawl after you.</p>
+          <div class="title-buttons">
+            <button id="btn-play" class="btn primary" type="button">▶ Play</button>
+            <button id="btn-howto" class="btn" type="button">? How to Play</button>
+            <button id="btn-settings" class="btn" type="button">⚙ Settings</button>
+          </div>
+          <p class="difficulty-line">Difficulty: <button id="btn-difficulty" class="btn small" type="button" aria-label="Change difficulty"><span id="title-difficulty">Easy</span> ⇄</button> <span class="hint">Easy: slower parents who check fewer spots.</span></p>
+          <ul class="controls-summary" aria-label="Controls">
+            <li><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> / arrows</span><span>Move &amp; take the stairs</span><span class="touch-only">Left thumb stick</span></li>
+            <li><span class="keys">Mouse drag · <kbd>Q</kbd>/<kbd>R</kbd></span><span>Look around</span><span class="touch-only">Right thumb drag</span></li>
+            <li><span class="keys"><kbd>C</kbd></span><span>Tiptoe on/off</span><span class="touch-only">Tiptoe button</span></li>
+            <li><span class="keys"><kbd>E</kbd></span><span>Hide / come out</span><span class="touch-only">Action button</span></li>
+            <li><span class="keys"><kbd>F</kbd> / <kbd>G</kbd></span><span>Fire / Freeze power</span><span class="touch-only">🔥 and ❄️ buttons next to Hide</span></li>
+            <li><span class="keys"><kbd>Esc</kbd> / <kbd>P</kbd></span><span>Pause &amp; house map</span><span class="touch-only">Pause button</span></li>
+          </ul>
+          <p id="title-stats" class="stats"></p>
+        </div>
+      </section>
+
+      <!-- ───────── How to play ───────── -->
+      <section id="howto" class="screen sheet" role="dialog" aria-modal="true" aria-labelledby="howto-heading" hidden>
+        <div class="sheet-card">
+          <h2 id="howto-heading" tabindex="-1">How to Play</h2>
+          <ol class="howto-list">
+            <li><strong>Head start (3:00 → 2:50).</strong> Mom and Dad count to ten in the foyer. Find a spot!</li>
+            <li><strong>Hide.</strong> Step onto a glowing tile beside furniture and press <kbd>E</kbd> (or the Action button). You stay put until you press it again.</li>
+            <li><strong>Run or tiptoe.</strong> Kai is much faster than his parents, but running footsteps carry about 4 m. Tiptoe (<kbd>C</kbd>) shrinks that to 1.5 m and is still a little quicker than a searching parent.</li>
+            <li><strong>They have to touch you.</strong> If a parent sees you they shout and chase, but you’re only caught when they tag you — or reach into the exact spot you’re hiding in. Break their line of sight before you hide: if they watch you duck in, they’ll check it.</li>
+            <li><strong>Listen for hunches.</strong> Before checking a spot a parent says it out loud (“Maybe behind the sofa…”). No spot is checked twice — spots they’ve already checked (✓ on the pause map) are the safest places to move to.</li>
+            <li><strong>The household.</strong> Baby Girl crawls after you and giggles. Nori yips if you pass close. Rocky bats a noisy toy upstairs. Mom and Dad follow those sounds.</li>
+            <li><strong>Answer to get away.</strong> When a parent catches you, a question pops up — counting, colors, letters, shapes or a tiny sum. Tap the right picture and they count to six while you run. You get three ⭐ escapes per round on Easy, one on Normal.</li>
+            <li><strong>🔥 Fire and ❄️ Freeze.</strong> Two power buttons sit right next to Hide (or press <kbd>F</kbd> / <kbd>G</kbd>). Use them any time you’re out in the open. Fire blows Mom and Dad back and makes them too hot to chase you; Freeze stops them still for longer. Each one recharges for a few seconds. If you get caught, answer the question right and pick a power to escape.</li>
+            <li><strong>Win</strong> by staying hidden until the clock hits 0:00.</li>
+          </ol>
+          <h3>The household</h3>
+          <ul id="cast-list" class="cast-list"></ul>
+          <button class="btn primary close-sheet" type="button" data-close="howto">Got it</button>
+        </div>
+      </section>
+
+      <!-- ───────── Settings ───────── -->
+      <section id="settings" class="screen sheet" role="dialog" aria-modal="true" aria-labelledby="settings-heading" hidden>
+        <div class="sheet-card">
+          <h2 id="settings-heading" tabindex="-1">Settings</h2>
+          <label class="toggle select"><span>Difficulty</span>
+            <select id="set-difficulty">
+              <option value="easy">Easy — slower parents, fewer spots checked</option>
+              <option value="normal">Normal</option>
+            </select>
+          </label>
+          <p class="hint">Difficulty applies from the next round.</p>
+          <label class="toggle"><input type="checkbox" id="set-questions" /> <span>Learning questions: answer one to get away when caught</span></label>
+          <label class="toggle"><input type="checkbox" id="set-read" /> <span>Read questions out loud (even when sound is muted)</span></label>
+          <label class="toggle"><input type="checkbox" id="set-mute" /> <span>Mute all sound</span></label>
+          <label class="toggle"><input type="checkbox" id="set-chatter" /> <span>Parents’ banter audio (captions stay on)</span></label>
+          <label class="toggle"><input type="checkbox" id="set-motion" /> <span>Reduced motion</span></label>
+          <label class="toggle"><input type="checkbox" id="set-invert" /> <span>Invert camera up/down</span></label>
+          <button class="btn primary close-sheet" type="button" data-close="settings">Done</button>
+        </div>
+      </section>
+
+      <!-- ───────── HUD ───────── -->
+      <div id="hud" hidden>
+        <div class="hud-top">
+          <div class="hud-where">
+            <span id="hud-floor" class="pill">Floor 1</span>
+            <span id="hud-room" class="pill soft">Family room</span>
+            <span id="hud-stars" class="pill soft" hidden></span>
+          </div>
+          <div id="hud-clock" class="clock" role="timer" aria-label="Time remaining">3:00</div>
+          <div class="hud-right">
+            <span id="hud-quiet" class="pill soft">🦶 Walk</span>
+            <button id="btn-pause" class="icon-btn" type="button" aria-label="Pause">❚❚</button>
+          </div>
+        </div>
+        <div id="hud-phase" class="banner" hidden></div>
+        <div id="hud-count" class="count-cue" hidden></div>
+        <div id="hud-danger" class="danger" hidden>
+          <span id="hud-danger-text" class="danger-text">⚠ Mom sees you — run!</span>
+          <span class="meter"><span id="hud-danger-meter"></span></span>
+        </div>
+        <div id="hud-notice" class="notice" hidden></div>
+        <div id="hud-hidden" class="hidden-badge" hidden>🙈 Hidden</div>
+        <div id="hud-captions" class="captions" aria-hidden="true"></div>
+        <div id="hud-prompt" class="prompt" hidden></div>
+        <div class="power-desk">
+          <button id="btn-fire-desk" class="desk-power fire" type="button" hidden>🔥 Fire <kbd>F</kbd></button>
+          <button id="btn-ice-desk" class="desk-power ice" type="button" hidden>❄️ Freeze <kbd>G</kbd></button>
+        </div>
+
+        <!-- Touch controls -->
+        <div id="touch" class="touch" aria-hidden="false">
+          <div id="stick-zone" class="stick-zone" aria-label="Movement stick"></div>
+          <div id="stick" class="stick" hidden><div id="stick-knob" class="stick-knob"></div></div>
+          <div class="touch-buttons">
+            <button id="btn-quiet" class="touch-btn" type="button" aria-pressed="false" aria-label="Tiptoe">🤫<span>Tiptoe</span></button>
+            <button id="btn-fire" class="touch-btn power fire" type="button" aria-label="Fire power" hidden>🔥<span>Fire</span></button>
+            <button id="btn-ice" class="touch-btn power ice" type="button" aria-label="Freeze power" hidden>❄️<span>Freeze</span></button>
+            <button id="btn-action" class="touch-btn big" type="button" aria-label="Hide">🙈<span id="btn-action-label">Hide</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ───────── Pause ───────── -->
+      <section id="pause" class="screen sheet" role="dialog" aria-modal="true" aria-labelledby="pause-heading" hidden>
+        <div class="sheet-card wide">
+          <h2 id="pause-heading">Paused</h2>
+          <div class="pause-buttons">
+            <button id="btn-resume" class="btn primary" type="button">▶ Resume</button>
+            <button id="btn-pause-settings" class="btn" type="button">⚙ Settings</button>
+            <button id="btn-pause-menu" class="btn" type="button">⌂ Main Menu</button>
+          </div>
+          <figure class="map-figure">
+            <canvas id="map-canvas" width="880" height="460" role="img" aria-label="House map: both floors, the winding stair link, and the laundry shortcut. Your position is marked; Mom's and Dad's are not."></canvas>
+            <figcaption>House map — you are the red dot. Mom’s and Dad’s positions are a secret. Teal ✓ spots have already been checked. Teal doorways mark the laundry shortcut loop.</figcaption>
+          </figure>
+          <p class="seed-line">Round seed: <code id="pause-seed"></code></p>
+        </div>
+      </section>
+
+      <!-- ───────── Answer to get away (shown when a parent catches Kai) ───────── -->
+      <section id="quiz" class="screen sheet quiz" role="dialog" aria-modal="true" aria-labelledby="quiz-heading" hidden>
+        <div class="sheet-card wide quiz-card">
+          <h2 id="quiz-heading">Mom found you!</h2>
+          <p id="quiz-sub" class="quiz-sub">Answer and you can run away!</p>
+          <div id="quiz-picture" class="quiz-picture" aria-hidden="true"></div>
+          <p class="quiz-say-line"><span id="quiz-say">How many?</span></p>
+          <button id="quiz-speak" class="quiz-hear" type="button" aria-label="Hear the question again">🔊 <span>Hear it again</span></button>
+          <div id="quiz-options" class="quiz-options"></div>
+          <p id="quiz-feedback" class="quiz-feedback" aria-hidden="true"></p>
+        </div>
+      </section>
+
+      <!-- ───────── Results ───────── -->
+      <section id="result" class="screen sheet" role="dialog" aria-modal="true" aria-labelledby="result-heading" hidden>
+        <div class="sheet-card wide">
+          <h2 id="result-heading" tabindex="-1">You stayed hidden!</h2>
+          <p id="result-sub" class="result-sub"></p>
+          <dl id="result-stats" class="result-stats"></dl>
+          <div id="chores" class="chores"></div>
+          <p id="chores-done" class="chores-done" hidden>✅ Chores complete!</p>
+          <div class="result-buttons">
+            <button id="btn-same" class="btn primary" type="button">↻ Same Round</button>
+            <button id="btn-new" class="btn" type="button">🎲 New Round</button>
+            <button id="btn-menu" class="btn" type="button">⌂ Main Menu</button>
+          </div>
+          <p class="seed-line">Round seed: <code id="result-seed"></code></p>
+        </div>
+      </section>
+
+      <!-- ───────── WebGL failure ───────── -->
+      <section id="gl-error" class="screen sheet" role="alertdialog" aria-labelledby="gl-error-heading" hidden>
+        <div class="sheet-card">
+          <h2 id="gl-error-heading">The 3D view couldn’t start</h2>
+          <p>Your browser didn’t give us a WebGL canvas. Try closing other tabs, enabling hardware acceleration, or using a recent Chrome, Edge, Firefox or Safari.</p>
+          <button id="btn-gl-retry" class="btn primary" type="button">↻ Retry</button>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

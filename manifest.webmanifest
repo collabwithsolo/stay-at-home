@@ -1,0 +1,16 @@
+{
+  "name": "Stay at Home!",
+  "short_name": "Stay at Home",
+  "description": "Kai hides from Mom and Dad in a cozy two-story house.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#2b2420",
+  "theme_color": "#2b2420",
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
